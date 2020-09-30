@@ -1,10 +1,10 @@
 import java.util.Scanner;
 
-public class DictionaryManagement {
+public class DictionaryManagement  {
     protected static int numberOfWords;
     protected Dictionary dictionary;
 
-    DictionaryManagement(){
+    DictionaryManagement() {
         numberOfWords = 0;
         dictionary = null;
     }
@@ -13,7 +13,7 @@ public class DictionaryManagement {
      * Get the number of words in dictionary.
      * @return the number of words
      */
-    public int getNumberOfWords(){
+    public int getNumberWord() {
         return numberOfWords;
     }
 
@@ -23,11 +23,14 @@ public class DictionaryManagement {
      * Step2 Next line enter English words
      * Step3 Next line again enter explanation into Vietnamese and repeat step2
      */
-    public void  insertFromCommandline() {
+    public void insertFromCommandline() {
         Scanner sc = new Scanner(System.in);
+
         numberOfWords = Integer.parseInt(sc.nextLine());
+
         dictionary = new Dictionary(numberOfWords);
-        Word[] arrWord = dictionary.getArrWord();
+        Word[] arrWord = dictionary.getArrayWord();
+
         for (int i = 0; i < numberOfWords; i++) {
             String target = sc.nextLine();
             String explain = sc.nextLine();

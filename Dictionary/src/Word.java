@@ -5,7 +5,7 @@ public class Word {
     /**
      * Constructor without parameter.
      */
-    Word(){
+    Word() {
         this.word_target = null;
         this.word_explain = null;
     }
@@ -19,17 +19,19 @@ public class Word {
         this.word_target = word_target;
         this.word_explain = word_explain;
     }
+
     public void setWord_target(String word_target) {
         this.word_target = word_target;
     }
 
     /**
      * Get the English word.
-            * @return the English word.
+     * @return the English word.
      */
     public String getWord_target() {
         return word_target;
     }
+
     public void setWord_explain(String word_explain) {
         this.word_explain = word_explain;
     }
@@ -41,4 +43,5 @@ public class Word {
     public String getWord_explain() {
         return word_explain;
     }
+
 }

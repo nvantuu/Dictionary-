@@ -1,15 +1,15 @@
 public class Dictionary {
-    protected Word[] arr;
+    private Word[] arr;
 
     /**
      * Constructor without parameter.
      */
-    Dictionary(){
+    Dictionary() {
         arr = null;
     }
 
     /**
-     * Initialize a word array with size.
+     * Constructor initialize a word array with size.
      * @param size is the length of the array.
      */
     Dictionary(int size) {
@@ -20,8 +20,7 @@ public class Dictionary {
      * Get the array words in the dictionary.
      * @return array of words
      */
-    public Word[] getArrWord(){
+    public Word[] getArrayWord() {
         return arr;
     }
 }
-

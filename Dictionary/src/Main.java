@@ -1,4 +1,4 @@
-public class Solution {
+public class Main {
     /**
      * The main function.
      */
