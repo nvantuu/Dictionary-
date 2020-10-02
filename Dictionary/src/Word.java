@@ -12,7 +12,8 @@ public class Word {
 
     /**
      * Constructor takes 2 parameters.
-     * @param word_target is 1 word, followed by it's Vietnamese meaning
+     *
+     * @param word_target  is 1 word, followed by it's Vietnamese meaning
      * @param word_explain is Vietnamese meaning
      */
     Word(String word_target, String word_explain) {
@@ -26,6 +27,7 @@ public class Word {
 
     /**
      * Get the English word.
+     *
      * @return the English word.
      */
     public String getWord_target() {
@@ -38,10 +40,10 @@ public class Word {
 
     /**
      * Get the mean of word.
+     *
      * @return the mean of word.
      */
     public String getWord_explain() {
         return word_explain;
     }
-
 }
