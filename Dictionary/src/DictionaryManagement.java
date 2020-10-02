@@ -1,10 +1,9 @@
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 import java.io.File;
-import java.util.Set;
 import java.util.TreeMap;
+import java.util.Map;
 
 public class DictionaryManagement  {
     protected Dictionary dictionary;
@@ -20,7 +19,7 @@ public class DictionaryManagement  {
         System.out.println("Nhấn phím 5 để tra cứu (chỉ với từ hoàn chỉnh)");
         System.out.println("Nhấn phím 6 điển hiển thị toàn bộ từ điển");
         System.out.println("Nhấn phím 7 để xuất ra file");
-        System.out.println("Nhấn phím 0 để đóng từ điển");
+        System.out.println("Nhấn phím 0 để đóng từ điển, hoặc để kết thúc chức năng hiện tại");
     }
 
     /**
@@ -62,7 +61,7 @@ public class DictionaryManagement  {
                 wordListInDict.put(target, explain);
             }
             scanner.close();
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

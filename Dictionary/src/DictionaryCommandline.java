@@ -1,5 +1,3 @@
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
-
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -78,7 +76,7 @@ public class DictionaryCommandline extends DictionaryManagement{
     public void dictionaryAdvanced() {
         insertFromFile();
         System.out.println("Từ điển đã sẵn sàng!");
-        DisplayFunction();
+        displayFunction();
         Scanner sc = new Scanner(System.in);
         while (true) {
             int status = sc.nextInt();
@@ -97,6 +95,7 @@ public class DictionaryCommandline extends DictionaryManagement{
             } else if (status == 7) {
                 dictionaryExportToFile();
             } else if (status == 0) {
+                System.out.println("Close the dictionary!");
                 return;
             }
         }
