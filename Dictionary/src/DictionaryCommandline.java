@@ -1,4 +1,5 @@
-import java.util.ArrayList;
+import java.util.TreeMap;
+import java.util.Set;
 
 public class DictionaryCommandline extends DictionaryManagement{
     /**
@@ -8,11 +9,13 @@ public class DictionaryCommandline extends DictionaryManagement{
         System.out.println("NO                    |English                                           |Vietnamese");
         String leftAlignFormat = "%-24d |%-50s |%s%n";
 
-        ArrayList<Word> arrWord = dictionary.getArrayWord();
+        TreeMap<String, String> mapWord = dictionary.getMapWord();
+        Set<String> set = mapWord.keySet();
 
-        for (int i = 0; i < arrWord.size(); i++) {
-            System.out.printf(leftAlignFormat, (i + 1),
-                    arrWord.get(i).getWord_target(), arrWord.get(i).getWord_explain());
+        int count = 0;
+
+        for (String key : set) {
+            System.out.printf(leftAlignFormat, ++count, key, mapWord.get(key));
         }
     }
 
