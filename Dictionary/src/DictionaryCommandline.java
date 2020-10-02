@@ -1,3 +1,5 @@
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
@@ -11,23 +13,30 @@ public class DictionaryCommandline extends DictionaryManagement{
      * Search for key when user enter.
      */
     public void dictionarySearcher() {
-        System.out.println("The dictionary search function: ");
+        System.out.println("___SEARCH IN THE DICTIONARY___");
+
         TreeMap<String, String> wordListOfDict = dictionary.getWordListOfDict();
         Scanner sc = new Scanner(System.in);
+        String leftAlignFormat = "|%-30s |%s %n";
         while (true) {
-            System.out.print("Enter the search key: ");
+            System.out.print("Search: ");
             String keySearch = sc.nextLine();
             if (keySearch.equals("0")) {
-                System.out.println("Search function ended!\n");
+                System.out.println("Search ended!\n");
+                DisplayFunction();
                 return;
             }
-
-            String leftAlignFormat = "%-32s |%s %n";
+            boolean tf = false;
             for (Map.Entry<String, String> entry : wordListOfDict.entrySet()) {
                 if (entry.getKey().indexOf(keySearch) == 0) {
+                    tf = true;
                     String stringRemain = entry.getKey().substring(keySearch.length());
-                    System.out.printf(leftAlignFormat, ANSI_YELLOW + "|"+ keySearch + ANSI_RESET + stringRemain, entry.getValue());
+                    System.out.printf(leftAlignFormat
+                            , ANSI_YELLOW + keySearch + ANSI_RESET + stringRemain, entry.getValue());
                 }
+            }
+            if (!tf) {
+                System.out.print("Not Found! Try again!\n");
             }
         }
     }
@@ -37,6 +46,7 @@ public class DictionaryCommandline extends DictionaryManagement{
      */
     public void showAllWords() {
         System.out.println("NO        |English                       |Vietnamese");
+
         String leftAlignFormat = "%-9d |%-32s |%s %n";
 
         TreeMap<String, String> wordListOfDict = dictionary.getWordListOfDict();
@@ -46,6 +56,8 @@ public class DictionaryCommandline extends DictionaryManagement{
         for (Map.Entry<String, String> entry : wordListOfDict.entrySet()) {
             System.out.printf(leftAlignFormat, ++count, entry.getKey(), entry.getValue());
         }
+        System.out.println();
+        DisplayFunction();
     }
 
     /**
@@ -66,15 +78,7 @@ public class DictionaryCommandline extends DictionaryManagement{
     public void dictionaryAdvanced() {
         insertFromFile();
         System.out.println("Từ điển đã sẵn sàng!");
-        System.out.println("Nhấn phím 1 để tìm kiếm");
-        System.out.println("Nhấn phím 2 để thêm từ");
-        System.out.println("Nhấn phím 3 để sửa từ");
-        System.out.println("Nhấn phím 4 để xóa từ");
-        System.out.println("Nhấn phím 5 để tra cứu (chỉ với từ hoàn chỉnh)");
-        System.out.println("Nhấn phím 6 điển hiển thị toàn bộ từ điển");
-        System.out.println("Nhấn phím 7 để xuất ra file");
-        System.out.println("Nhấn phím 0 để đóng từ điển");
-
+        DisplayFunction();
         Scanner sc = new Scanner(System.in);
         while (true) {
             int status = sc.nextInt();
