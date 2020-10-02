@@ -10,6 +10,10 @@ public class Dictionary {
         arr = new TreeMap<>();
     }
 
+    /**
+     * Get English words entered from keyboard.
+     * @return map has all English words.
+     */
     public TreeMap<String, String> getMapWord() {
         return arr;
     }

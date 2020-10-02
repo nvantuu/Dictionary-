@@ -40,6 +40,12 @@ public class DictionaryManagement  {
         }
     }
 
+    /**
+     * Function imports data from file dictionaries.txt
+     * Step1 enter the English words.
+     * Step2 enter the mean of word after the tab.
+     * Step3 adđ the English word and the mean into the map and repeat step2.
+     */
     public void insertFromFile() {
         File input = new File("D:\\Learning\\Dictionary-\\Dictionary\\data\\dictionaries.txt");
         try {
@@ -59,6 +65,9 @@ public class DictionaryManagement  {
         }
     }
 
+    /**
+     * Function print the English words and its Vietnamese meaning.
+     */
     public void dictionaryLookup() {
         while (true) {
             System.out.println("Enter the keyword: ");

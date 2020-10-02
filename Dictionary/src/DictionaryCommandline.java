@@ -27,6 +27,9 @@ public class DictionaryCommandline extends DictionaryManagement{
         showAllWords();
     }
 
+    /**
+     * The dictionaryAdvanced() function calls for insertFromFile(), showAllWords() and dictionaryLookup().
+     */
     public void dictionaryAdvanced() {
         insertFromFile();
         showAllWords();
