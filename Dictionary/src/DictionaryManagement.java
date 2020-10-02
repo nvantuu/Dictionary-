@@ -12,7 +12,7 @@ public class DictionaryManagement  {
     /**
      * Display function of dictionary.
      */
-    public void DisplayFunction() {
+    public void displayFunction() {
         System.out.println("Nhấn phím 1 để tìm kiếm");
         System.out.println("Nhấn phím 2 để thêm từ");
         System.out.println("Nhấn phím 3 để sửa từ");
@@ -83,7 +83,7 @@ public class DictionaryManagement  {
 
             if (keyWord.equals("0")) {
                 System.out.println("Look up ended!\n");
-                DisplayFunction();
+                displayFunction();
                 return;
             }
 
@@ -107,7 +107,7 @@ public class DictionaryManagement  {
             String target = sc.nextLine();
             if (target.equals("0")) {
                 System.out.println("Add ended!\n");
-                DisplayFunction();
+                displayFunction();
                 return;
             }
             System.out.print("Enter the Vietnamese meaning: ");
@@ -129,7 +129,7 @@ public class DictionaryManagement  {
 
             if (keyWord.equals("0")) {
                 System.out.println("Remove ended!\n");
-                DisplayFunction();
+                displayFunction();
                 return;
             }
             if (dictionary.getWordListOfDict().get(keyWord) != null) {
@@ -152,7 +152,7 @@ public class DictionaryManagement  {
 
             if (keyWord.equals("0")) {
                 System.out.println("Fix ended!\n");
-                DisplayFunction();
+                displayFunction();
                 return;
             }
 
@@ -185,7 +185,7 @@ public class DictionaryManagement  {
 
             fw.close();
             System.out.println("Current data of dictionary has been exported to file!");
-            DisplayFunction();
+            displayFunction();
         } catch (IOException e) {
             e.printStackTrace();
         }

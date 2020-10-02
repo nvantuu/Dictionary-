@@ -23,7 +23,7 @@ public class DictionaryCommandline extends DictionaryManagement{
             String keySearch = sc.nextLine();
             if (keySearch.equals("0")) {
                 System.out.println("Search ended!\n");
-                DisplayFunction();
+                displayFunction();
                 return;
             }
             boolean tf = false;
@@ -57,7 +57,7 @@ public class DictionaryCommandline extends DictionaryManagement{
             System.out.printf(leftAlignFormat, ++count, entry.getKey(), entry.getValue());
         }
         System.out.println();
-        DisplayFunction();
+        displayFunction();
     }
 
     /**
