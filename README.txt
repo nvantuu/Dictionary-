@@ -18,5 +18,5 @@
 3/10	Delete Word class.
 	Change some displays in console.
 
-3/10    Complete version 1.3
-	switch to Graphics.
+3/10    Commandline Dictionary version 1.2.
+        (Complete)
