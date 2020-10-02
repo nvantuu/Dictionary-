@@ -1,20 +1,9 @@
 import java.util.TreeMap;
 
 public class Dictionary {
-    private TreeMap<String, String> arr;
+    private final TreeMap<String, String> wordListOfDict = new TreeMap<>();
 
-    /**
-     * Constructor without parameter.
-     */
-    public Dictionary() {
-        arr = new TreeMap<>();
-    }
-
-    /**
-     * Get English words entered from keyboard.
-     * @return map has all English words.
-     */
-    public TreeMap<String, String> getMapWord() {
-        return arr;
+    public TreeMap<String, String> getWordListOfDict() {
+        return wordListOfDict;
     }
 }
