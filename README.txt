@@ -16,5 +16,8 @@
 	Add displayFunction().
 
 3/10	Delete Word class.
-	Change some displays in console. 
- 
+	Change some displays in console.
+
+3/10    Commandline Dictionary version 1.2.
+        (Complete)
+
