@@ -1,0 +1,26 @@
+.button {
+-fx-background-color: #ffaec8;
+    -fx-padding: 0 0 0 0;
+    -fx-border-color: #ff5e93;
+    -fx-border-width: 1px;
+    -fx-border-radius: 3px;
+    -fx-font-family: "Showcard Gothic";
+    -fx-font-size: 11px;
+    -fx-text-fill: #ff5e93;
+}
+
+.rootAnchorPane {
+    -fx-background-color: #ffe6ee;
+}
+
+.labelLogo {
+    -fx-background-color: #ffaec8;
+}
+
+.label {
+    -fx-font-family: "Asap Medium";
+    -fx-font-weight: Bold;
+    -fx-font-size: 13px;
+    -fx-text-fill: #ff5e93;
+}
+

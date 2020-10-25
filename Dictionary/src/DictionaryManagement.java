@@ -4,53 +4,72 @@ import java.util.*;
 import java.io.File;
 
 public class DictionaryManagement {
-    protected Dictionary dictionary;
+    private Dictionary dictionary;
 
     /**
      * Function get data from database (txt file).
      */
     public void insertFromFile() throws IOException {
-        File dataFileIsFormatted = new File(Main.DATA_FILE_PATH);
-        Scanner scanner = new Scanner(dataFileIsFormatted);
+        File file = new File(Main.DATA_FILE_PATH);
+        Scanner sc = new Scanner(file);
 
         dictionary = new Dictionary();
-        TreeMap<String, String> wordListOfDict = dictionary.getWordListOfDict();
-
-        while (scanner.hasNextLine()) {
-            String str = scanner.nextLine();
-            String target = str.substring(0, str.indexOf("\t"));
-            String explain = str.substring(str.indexOf("\t") + 1);
-            wordListOfDict.put(target, explain);
+        TreeMap<String, ArrayList<String>> wordList = new TreeMap<>();
+        String target = sc.nextLine().substring(1).trim();
+        ArrayList<String> explain = new ArrayList<>();
+        while (sc.hasNextLine()) {
+            String str = sc.nextLine();
+            if (str.indexOf("@") == 0) {
+                wordList.put(target, explain);
+                target = str.substring(1).trim();
+                explain = new ArrayList<>();
+            } else if (str.indexOf("=") == 0) {
+                str = str.replace("+", " : ");
+                String word = "  =  " + str.substring(1);
+                explain.add(word);
+            } else if (str.indexOf("#") == 0 || str.indexOf("*") == 0) {
+                explain.add(str);
+            } else {
+                explain.add("     " + str);
+            }
         }
-        scanner.close();
+        dictionary.setWordList(wordList);
+        sc.close();
     }
 
     /**
      * Lookup the complete word in dictionary.
      */
-    public String dictionarySearch(String engWord) {
-        TreeMap<String, String> wordListOfDict = dictionary.getWordListOfDict();
-
-        if (wordListOfDict.get(engWord) == null) {
-            return "Not found!";
+    public ArrayList<String> dictionarySearch(String engWord) {
+        TreeMap<String, ArrayList<String>> wordList = dictionary.getWordList();
+        if (engWord != null) {
+            if (wordList.get(engWord) != null) {
+                return wordList.get(engWord);
+            }
         }
-
-        return wordListOfDict.get(engWord);
+        return null;
     }
 
     /**
      * Add the new word into dictionary.
      */
     public void dictionaryAdd(String engWord, String vietWord) {
-        dictionary.getWordListOfDict().put(engWord, vietWord);
+        String[] explain = vietWord.split("\n");
+
+        if (dictionary.getWordList().get(engWord) != null) {
+            dictionary.getWordList().get(engWord).addAll(Arrays.asList(explain));
+        } else {
+            ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(explain));
+            dictionary.getWordList().put(engWord, arrayList);
+        }
     }
 
     /**
      * Remove the word you want.
      */
     public boolean dictionaryDelete(String engWord) {
-        if (dictionary.getWordListOfDict().get(engWord) != null) {
-            dictionary.getWordListOfDict().remove(engWord);
+        if (dictionary.getWordList().get(engWord) != null) {
+            dictionary.getWordList().remove(engWord);
         } else {
             return false;
         }
@@ -61,8 +80,10 @@ public class DictionaryManagement {
      * Fix meaning of the word you want fix.
      */
     public boolean dictionaryFix(String engWord, String vietWord) {
-        if (dictionary.getWordListOfDict().containsKey(engWord)) {
-            dictionary.getWordListOfDict().put(engWord, vietWord);
+        if (dictionary.getWordList().containsKey(engWord)) {
+            String[] explain = vietWord.split("\n");
+            ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(explain));
+            dictionary.getWordList().put(engWord, arrayList);
         } else {
             return false;
         }
@@ -75,35 +96,26 @@ public class DictionaryManagement {
      */
     public void dictionaryExportToFile(String path) throws IOException {
         FileWriter fw = new FileWriter(path);
-        TreeMap<String, String> wordListOfDict = dictionary.getWordListOfDict();
+        TreeMap<String, ArrayList<String>> wordList = dictionary.getWordList();
 
-        for (Map.Entry<String, String> entry : wordListOfDict.entrySet()) {
-            fw.write(entry.getKey() + "    " + entry.getValue() + "\n");
+        int count = 0;
+
+        for (Map.Entry<String, ArrayList<String>> entry : wordList.entrySet()) {
+            fw.write(++count + ")    " + entry.getKey() + "\n");
+            for (String str : entry.getValue()) {
+                fw.write("       " + str + "\n");
+            }
+            fw.write("\n");
         }
 
         fw.close();
     }
 
-    public void showAllWords() {
-        System.out.println("NO        |English                       |Vietnamese");
-
-        String leftAlignFormat = "%-9d |%-32s |%s %n";
-
-        TreeMap<String, String> wordListOfDict = dictionary.getWordListOfDict();
-
-        int count = 0;
-
-        for (Map.Entry<String, String> entry : wordListOfDict.entrySet()) {
-            System.out.printf(leftAlignFormat, ++count, entry.getKey(), entry.getValue());
-        }
-        System.out.println();
-    }
-
     public ArrayList<String> dictionaryLookup(String engWord) {
-        TreeMap<String, String> wordListOfDict = dictionary.getWordListOfDict();
+        TreeMap<String, ArrayList<String>> wordList = dictionary.getWordList();
         ArrayList<String> listWord = new ArrayList<>();
 
-        for (Map.Entry<String, String> entry : wordListOfDict.entrySet()) {
+        for (Map.Entry<String, ArrayList<String>> entry : wordList.entrySet()) {
             // Use indexOf() but not contains()
             // to make sure that "engWord" is the first part of the complete word.
             if (entry.getKey().indexOf(engWord) == 0) {
