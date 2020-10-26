@@ -1,88 +1,128 @@
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Scanner;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.*;
 import java.io.File;
 
-public class DictionaryManagement  {
-    protected static int numberOfWords;
-    protected Dictionary dictionary;
+public class DictionaryManagement {
+    private Dictionary dictionary;
 
-    DictionaryManagement() {
-        numberOfWords = 0;
+    /**
+     * Function get data from database (txt file).
+     */
+    public void insertFromFile() throws IOException {
+        File file = new File(Main.DATA_FILE_PATH);
+        Scanner sc = new Scanner(file);
+
+        dictionary = new Dictionary();
+        TreeMap<String, ArrayList<String>> wordList = new TreeMap<>();
+        String target = sc.nextLine().substring(1).trim();
+        ArrayList<String> explain = new ArrayList<>();
+        while (sc.hasNextLine()) {
+            String str = sc.nextLine();
+            if (str.indexOf("@") == 0) {
+                wordList.put(target, explain);
+                target = str.substring(1).trim();
+                explain = new ArrayList<>();
+            } else if (str.indexOf("=") == 0) {
+                str = str.replace("+", " : ");
+                String word = "  =  " + str.substring(1);
+                explain.add(word);
+            } else if (str.indexOf("#") == 0 || str.indexOf("*") == 0) {
+                explain.add(str);
+            } else {
+                explain.add("     " + str);
+            }
+        }
+        dictionary.setWordList(wordList);
+        sc.close();
     }
 
     /**
-     * Get the number of words in dictionary.
-     * @return the number of words
+     * Lookup the complete word in dictionary.
      */
-    public int getNumberWord() {
-        return numberOfWords;
+    public ArrayList<String> dictionarySearch(String engWord) {
+        TreeMap<String, ArrayList<String>> wordList = dictionary.getWordList();
+        if (engWord != null) {
+            if (wordList.get(engWord) != null) {
+                return wordList.get(engWord);
+            }
+        }
+        return null;
     }
 
     /**
-     * Function imports data for the dictionary.
-     * Step1 First line enter the number of words on the keyboard (Word).
-     * Step2 Next line enter English words
-     * Step3 Next line again enter explanation into Vietnamese and repeat step2
+     * Add the new word into dictionary.
      */
-    public void insertFromCommandline() {
-        Scanner sc = new Scanner(System.in);
+    public void dictionaryAdd(String engWord, String vietWord) {
+        String[] explain = vietWord.split("\n");
 
-        numberOfWords = Integer.parseInt(sc.nextLine());
-
-        dictionary = new Dictionary(numberOfWords);
-        ArrayList<Word> arrWord = dictionary.getArrayWord();
-
-        for (int i = 0; i < numberOfWords; i++) {
-            String target = sc.nextLine();
-            String explain = sc.nextLine();
-            arrWord.set(i, new Word(target, explain));
+        if (dictionary.getWordList().get(engWord) != null) {
+            dictionary.getWordList().get(engWord).addAll(Arrays.asList(explain));
+        } else {
+            ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(explain));
+            dictionary.getWordList().put(engWord, arrayList);
         }
     }
 
-    public void insertFromFile() {
-        File input = new File("D:\\Learning\\Dictionary-\\data\\dictionaries.txt");
-        try {
-            Scanner sc = new Scanner(input);
-
-            dictionary = new Dictionary();
-            ArrayList<Word> arrWord = dictionary.getArrayWord();
-            while (sc.hasNext()) {
-                String line = sc.nextLine();
-                String engWord = line.substring(0, line.indexOf("\t"));
-                String vietWord = line.substring(line.indexOf("\t") + 1);
-                arrWord.add(new Word(engWord, vietWord));
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+    /**
+     * Remove the word you want.
+     */
+    public boolean dictionaryDelete(String engWord) {
+        if (dictionary.getWordList().get(engWord) != null) {
+            dictionary.getWordList().remove(engWord);
+        } else {
+            return false;
         }
+        return true;
     }
 
-    public void dictionaryLookup() {
-        while (true) {
-            System.out.println("Enter the keyword: ");
+    /**
+     * Fix meaning of the word you want fix.
+     */
+    public boolean dictionaryFix(String engWord, String vietWord) {
+        if (dictionary.getWordList().containsKey(engWord)) {
+            String[] explain = vietWord.split("\n");
+            ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(explain));
+            dictionary.getWordList().put(engWord, arrayList);
+        } else {
+            return false;
+        }
 
-            Scanner sc = new Scanner(System.in);
-            String keyWord = sc.nextLine();
+        return true;
+    }
 
-            if (keyWord.equals("0")) {
-                return;
+    /**
+     * Export current data of dictionary to files.
+     */
+    public void dictionaryExportToFile(String path) throws IOException {
+        FileWriter fw = new FileWriter(path);
+        TreeMap<String, ArrayList<String>> wordList = dictionary.getWordList();
+
+        int count = 0;
+
+        for (Map.Entry<String, ArrayList<String>> entry : wordList.entrySet()) {
+            fw.write(++count + ")    " + entry.getKey() + "\n");
+            for (String str : entry.getValue()) {
+                fw.write("       " + str + "\n");
             }
+            fw.write("\n");
+        }
 
-            ArrayList<Word> arrWord = dictionary.getArrayWord();
+        fw.close();
+    }
 
-            boolean found = false;
-            for (Word currentWord : arrWord) {
-                if (currentWord.getWord_target().equals(keyWord)) {
-                    System.out.println(currentWord.getWord_explain());
-                    found = true;
-                    break;
-                }
-            }
+    public ArrayList<String> dictionaryLookup(String engWord) {
+        TreeMap<String, ArrayList<String>> wordList = dictionary.getWordList();
+        ArrayList<String> listWord = new ArrayList<>();
 
-            if (found == false) {
-                System.out.println("Not found the keyword!");
+        for (Map.Entry<String, ArrayList<String>> entry : wordList.entrySet()) {
+            // Use indexOf() but not contains()
+            // to make sure that "engWord" is the first part of the complete word.
+            if (entry.getKey().indexOf(engWord) == 0) {
+                listWord.add(entry.getKey());
             }
         }
+
+        return listWord;
     }
 }

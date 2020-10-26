@@ -1,28 +1,22 @@
 import java.util.ArrayList;
+import java.util.TreeMap;
 
 public class Dictionary {
-    private ArrayList<Word> arr;
+    private static TreeMap<String, ArrayList<String>> wordList  = new TreeMap<>();
 
     /**
-     * Constructor without parameter.
+     * Set data dictionary.
+     * @param wordList the parameter of data
      */
-    public Dictionary() {
-        arr = new ArrayList<Word>();
+    public void setWordList(TreeMap<String, ArrayList<String>> wordList) {
+        Dictionary.wordList = wordList;
     }
 
     /**
-     * Constructor initialize a word array with size.
-     * @param size is the length of the array.
+     * Get the map include word list.
+     * @return Word list of dictionary
      */
-    public Dictionary(int size) {
-        arr = new ArrayList<Word>(size);
-    }
-
-    /**
-     * Get the array words in the dictionary.
-     * @return array of words
-     */
-    public ArrayList<Word> getArrayWord() {
-        return arr;
+    public TreeMap<String, ArrayList<String>> getWordList() {
+        return wordList;
     }
 }
