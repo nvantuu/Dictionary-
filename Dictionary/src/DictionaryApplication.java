@@ -13,9 +13,9 @@ import javafx.scene.control.*;
 import javafx.scene.effect.Lighting;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -23,14 +23,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import static javafx.scene.text.FontWeight.BOLD;
-
 public class DictionaryApplication extends Application {
     private static final int lengthFuncSearch = 12;
     private static final int lengthFuncDefault = 9;
     private static final int lengthFuncAdd = 14;
     private static final int lengthFuncDelete = 12;
-    private static final int lengthFuncFix = 14;
+    private static final int lengthFuncEdit = 14;
     private static final int lengthFuncExport = 13;
 
     private TextField engText;
@@ -136,8 +134,8 @@ public class DictionaryApplication extends Application {
     public void resetFuncView(AnchorPane root) {
         if (getLength(root) > lengthFuncDefault) {
             int subtract = getLength(root) - lengthFuncDefault;
-            root.getChildren().remove(root.getChildren().toArray().length - subtract
-                    , root.getChildren().toArray().length);
+            root.getChildren().remove(root.getChildren().toArray().length - subtract,
+                     root.getChildren().toArray().length);
         }
         for (Object obj : root.getChildren().toArray()) {
             if (obj instanceof Button) {
@@ -188,7 +186,7 @@ public class DictionaryApplication extends Application {
                 break;
             case "Delete" : loadDeleteView(root);
                 break;
-            case "Fix" : loadFixView(root);
+            case "Edit" : loadEditView(root);
                 break;
             case "Export" : loadExportView(stage);
                 break;
@@ -201,7 +199,7 @@ public class DictionaryApplication extends Application {
     public void loadSearchView(AnchorPane root) {
         engLabel = setLabel("English word", 125, 113, 150, 17);
         engText = setTextField(125, 136, 255,35);
-        engText.setOnKeyReleased(keyEvent -> displayListView(root));
+        engText.setOnKeyReleased(keyEvent -> displayListView(root, keyEvent));
         Button searchButton = setButton("Search", 390, 136, 55, 35);
         searchButton.setOnAction(actionEvent -> displayVietnameseMeaning(root, 0));
         root.getChildren().addAll(engLabel, engText, searchButton);
@@ -225,14 +223,14 @@ public class DictionaryApplication extends Application {
         root.getChildren().addAll(engLabel, engText, deleteButton);
     }
 
-    public void loadFixView(AnchorPane root) {
+    public void loadEditView(AnchorPane root) {
         engLabel = setLabel("English word", 125, 113, 150, 17);
         vietLabel = setLabel("Vietnamese meaning", 125, 187, 150, 17);
         engText = setTextField(125, 136, 320,35);
         vietText = setTextArea(125, 210, 320, 124);
-        Button fixButton = setButton("Fix", 390, 350, 55, 35);
-        fixButton.setOnAction(actionEvent -> fixAction(root));
-        root.getChildren().addAll(engLabel, vietLabel, engText, vietText, fixButton);
+        Button editButton = setButton("Edit", 390, 350, 55, 35);
+        editButton.setOnAction(actionEvent -> editAction(root));
+        root.getChildren().addAll(engLabel, vietLabel, engText, vietText, editButton);
     }
 
     public void loadExportView(Stage stage) {
@@ -265,9 +263,12 @@ public class DictionaryApplication extends Application {
         yellowButton.setOnAction(actionEvent -> setStyleSheet(root.getScene(), "yellow"));
         Button pinkButton = setButton("Choose", 390, 284, 55, 35);
         pinkButton.setOnAction(actionEvent -> setStyleSheet(root.getScene(), "pink"));
+
+        Label infoLabel = setLabel("___Author: 3T - Toán, Tuấn, Tú! ^.^___", 125, 360, 320, 17);
+        infoLabel.setAlignment(Pos.CENTER);
         root.getChildren().addAll(blueLabel,blueImage, blueButton,
                 yellowLabel, yellowImage, yellowButton,
-                pinkLabel, pinkImage, pinkButton);
+                pinkLabel, pinkImage, pinkButton, infoLabel);
     }
 
     public void setStyleSheet(Scene scene, String option) {
@@ -278,11 +279,17 @@ public class DictionaryApplication extends Application {
         logoLabel.setGraphic(setImageView(Main.LOGO_IMAGE_PATH, 0, 0, 600, 75));
     }
 
-    public void displayListView(AnchorPane root) {
+    public void displayListView(AnchorPane root, javafx.scene.input.KeyEvent keyEvent) {
+        if (keyEvent.getCode() == KeyCode.ENTER) {
+            displayVietnameseMeaning(root, 0);
+            return;
+        }
         if (getLength(root) > lengthFuncSearch) {
             int subtract = getLength(root) - lengthFuncSearch;
             root.getChildren().remove(getLength(root) - subtract, getLength(root));
         }
+        borderPane.setVisible(false);
+
         String engWord = engText.getText();
         ArrayList<String> listWord = management.dictionaryLookup(engWord);
         if (!listWord.isEmpty()) {
@@ -340,9 +347,7 @@ public class DictionaryApplication extends Application {
             Label vietArea = setLabel(null,125, 282, 2000, 1000);
             String explain = "";
             for (String str : vietWord) {
-                if (str.indexOf("#") == 0) {
-                    continue;
-                } else {
+                if (str.indexOf("#") != 0) {
                     explain = explain.concat(str + "\n");
                 }
             }
@@ -352,6 +357,7 @@ public class DictionaryApplication extends Application {
 
             root.getChildren().addAll(label1, label2, label3, speakButton);
         } else {
+            borderPane.setVisible(false);
             label1 = setLabel("Try again!", 125, 187, 255, 17);
             label2 = setLabel("The word \"" + engWord + "\" is not in the dictionary.", 125, 205, 255, 600);
             root.getChildren().addAll(label1, label2);
@@ -398,22 +404,22 @@ public class DictionaryApplication extends Application {
         root.getChildren().addAll(label1, label2);
     }
 
-    public void fixAction(AnchorPane root) {
+    public void editAction(AnchorPane root) {
         String engWord = engText.getText();
         String vietWord = vietText.getText();
-        boolean check = management.dictionaryFix(engWord, vietWord);
+        boolean check = management.dictionaryEdit(engWord, vietWord);
         Label label1;
         Label label2;
 
         if (check) {
             label1 = setLabel(" ", 125, 340, 255, 17);
-            label2 = setLabel("Fix \"" + engWord + "\" complete!", 125, 358, 255, 17);
+            label2 = setLabel("Edit \"" + engWord + "\" complete!", 125, 358, 255, 17);
         } else {
             label1 = setLabel("Try again!", 125, 340, 255, 17);
             label2 = setLabel("Do not find \"" + engWord + "\" in the dictionary.", 125, 358, 255, 17);
         }
-        if (getLength(root) > lengthFuncFix) {
-            int subtract = getLength(root) - lengthFuncFix;
+        if (getLength(root) > lengthFuncEdit) {
+            int subtract = getLength(root) - lengthFuncEdit;
             root.getChildren().remove(getLength(root) - subtract, getLength(root));
         }
         root.getChildren().addAll(label1, label2);
@@ -445,10 +451,6 @@ public class DictionaryApplication extends Application {
         if (file != null) {
             pathText.setText(file.toPath().toString());
         }
-    }
-
-    public void settingAction() {
-
     }
 
     public void loadToListHistory(String newWord) {
