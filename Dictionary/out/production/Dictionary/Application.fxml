@@ -47,11 +47,11 @@
                </image>
             </ImageView>
          </graphic></Button>
-      <Button layoutX="15.0" layoutY="238.0" mnemonicParsing="false" onAction="#loadFuncView" prefHeight="45.0" prefWidth="70.0" text="Fix" AnchorPane.leftAnchor="15.0">
+      <Button layoutX="15.0" layoutY="238.0" mnemonicParsing="false" onAction="#loadFuncView" prefHeight="45.0" prefWidth="70.0" text="Edit" AnchorPane.leftAnchor="15.0">
          <graphic>
             <ImageView fitHeight="23.0" fitWidth="23.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@image/fix.png" />
+                  <Image url="@image/edit.png" />
                </image>
             </ImageView>
          </graphic></Button>

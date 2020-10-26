@@ -77,9 +77,9 @@ public class DictionaryManagement {
     }
 
     /**
-     * Fix meaning of the word you want fix.
+     * Edit meaning of the word you want edit.
      */
-    public boolean dictionaryFix(String engWord, String vietWord) {
+    public boolean dictionaryEdit(String engWord, String vietWord) {
         if (dictionary.getWordList().containsKey(engWord)) {
             String[] explain = vietWord.split("\n");
             ArrayList<String> arrayList = new ArrayList<>(Arrays.asList(explain));
@@ -105,7 +105,6 @@ public class DictionaryManagement {
             for (String str : entry.getValue()) {
                 fw.write("       " + str + "\n");
             }
-            fw.write("\n");
         }
 
         fw.close();
